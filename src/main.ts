@@ -1,3 +1,9 @@
+import { GreyscaleConverter } from "greyscale-converter/main";
+
 import "assets/style.css";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = ``;
+const run = () => {
+  new GreyscaleConverter();
+};
+
+run();

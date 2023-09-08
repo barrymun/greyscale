@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "lint-staged": {
-    "*.ts": "eslint --cache --fix"
+    "src/**/*.ts": [
+      "prettier --write \"src/**/*.ts\""
+    ]
   },
   "scripts": {
     "dev": "vite",
@@ -15,6 +17,7 @@
   "devDependencies": {
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
+    "prettier": "3.0.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-tsconfig-paths": "^4.2.0"
