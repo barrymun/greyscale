@@ -1,5 +1,5 @@
 import { ImageExtension, ImageType } from "utils/constants";
-import { greyscaleImg, greyscaleInput } from "utils/elements";
+import { greyscaleCanvas, greyscaleCtx, greyscaleImg, greyscaleInput } from "utils/elements";
 
 export class GreyscaleConverter {
   private imageExtension: string | undefined;
@@ -13,6 +13,30 @@ export class GreyscaleConverter {
   constructor() {
     this.bindListeners();
   }
+
+  private handleImageLoad = (_event: Event): void => {
+    // Set canvas dimensions to match image
+    greyscaleCanvas.width = greyscaleImg.width;
+    greyscaleCanvas.height = greyscaleImg.height;
+
+    // Draw image onto canvas
+    greyscaleCtx.drawImage(greyscaleImg, 0, 0);
+
+    // Get image data
+    const imageData = greyscaleCtx.getImageData(0, 0, greyscaleCanvas.width, greyscaleCanvas.height);
+    const data = imageData.data;
+
+    // Convert each pixel to greyscale
+    for (let i = 0; i < data.length; i += 4) {
+      const grey = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+      data[i] = grey; // red
+      data[i + 1] = grey; // green
+      data[i + 2] = grey; // blue
+    }
+
+    // Put modified image data back onto canvas
+    greyscaleCtx.putImageData(imageData, 0, 0);
+  };
 
   private handleChange = (event: Event): void => {
     if (!(event.target instanceof HTMLInputElement)) return;
@@ -44,12 +68,14 @@ export class GreyscaleConverter {
 
   private bindListeners = (): void => {
     greyscaleInput.addEventListener("change", this.handleChange);
+    greyscaleImg.addEventListener("load", this.handleImageLoad);
 
     window.addEventListener("unload", this.handleUnload);
   };
 
   private handleUnload = (): void => {
     greyscaleInput.removeEventListener("change", this.handleChange);
+    greyscaleImg.removeEventListener("load", this.handleImageLoad);
 
     window.removeEventListener("unload", this.handleUnload);
   };
