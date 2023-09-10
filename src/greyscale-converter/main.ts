@@ -1,5 +1,6 @@
-import { ImageExtension, ImageType } from "utils/constants";
+import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
 import { greyscaleCanvas, greyscaleCtx, greyscaleImg, greyscaleInput } from "utils/elements";
+import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
   private imageExtension: string | undefined;
@@ -28,7 +29,7 @@ export class GreyscaleConverter {
 
     // Convert each pixel to greyscale
     for (let i = 0; i < data.length; i += 4) {
-      const grey = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+      const grey = data[i] * redCoefficient + data[i + 1] * greenCoefficient + data[i + 2] * blueCoefficient;
       data[i] = grey; // red
       data[i + 1] = grey; // green
       data[i + 2] = grey; // blue
