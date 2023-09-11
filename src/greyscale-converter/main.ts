@@ -1,5 +1,5 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
-import { canvas, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
+import { colourCanvas, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -59,8 +59,8 @@ export class GreyscaleConverter {
     const ctx = targetCanvas.getContext("2d")!;
 
     // Set canvas dimensions to match the image
-    canvas.width = img.width;
-    canvas.height = img.height;
+    targetCanvas.width = img.width;
+    targetCanvas.height = img.height;
 
     // Draw the image onto the canvas
     ctx.drawImage(img, 0, 0, img.width, img.height);
@@ -78,35 +78,35 @@ export class GreyscaleConverter {
     // Get canvas context
     const ctx = targetCanvas.getContext("2d")!;
 
-    // Step 1: Create a temporary canvas and context.
+    // Step 1: Create a temporary canvas and context
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d")!;
     tempCanvas.width = targetCanvas.width;
     tempCanvas.height = targetCanvas.height;
 
-    // Copy the content of the original canvas onto the temporary canvas.
+    // Copy the content of the original canvas onto the temporary canvas
     tempCtx.drawImage(targetCanvas, 0, 0);
 
-    // Step 2: Resize the original canvas.
+    // Step 2: Resize the original canvas
     targetCanvas.width = newWidth;
     targetCanvas.height = newHeight;
 
-    // Step 3: Draw the content of the temporary canvas back onto the resized original canvas.
+    // Step 3: Draw the content of the temporary canvas back onto the resized original canvas
     ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
   };
 
   private handleImageLoad = (_event: Event): void => {
     this.convertImageToCanvas({
       img: greyscaleImg,
-      targetCanvas: canvas,
+      targetCanvas: colourCanvas,
     });
     this.resizeCanvas({
-      targetCanvas: canvas,
-      newWidth: canvas.width * 0.5,
-      newHeight: canvas.height * 0.5,
+      targetCanvas: colourCanvas,
+      newWidth: colourCanvas.width * 0.5,
+      newHeight: colourCanvas.height * 0.5,
     });
     this.convertToGreyscale({
-      sourceCanvas: canvas,
+      sourceCanvas: colourCanvas,
       targetCanvas: greyscaleCanvas,
     });
   };
