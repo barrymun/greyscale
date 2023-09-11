@@ -1,5 +1,5 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
-import { canvas, ctx, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
+import { canvas, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -48,26 +48,36 @@ export class GreyscaleConverter {
     targetCtx.putImageData(imageData, 0, 0);
   };
 
-  private convertImageToCanvas = (): void => {
+  private convertImageToCanvas = ({
+    img,
+    targetCanvas,
+  }: {
+    img: HTMLImageElement;
+    targetCanvas: HTMLCanvasElement;
+  }): void => {
+    // Get canvas context
+    const ctx = targetCanvas.getContext("2d")!;
+
     // Set canvas dimensions to match the image
-    canvas.width = greyscaleImg.width;
-    canvas.height = greyscaleImg.height;
+    canvas.width = img.width;
+    canvas.height = img.height;
 
     // Draw the image onto the canvas
-    ctx.drawImage(greyscaleImg, 0, 0, greyscaleImg.width, greyscaleImg.height);
+    ctx.drawImage(img, 0, 0, img.width, img.height);
   };
 
   private resizeCanvas = ({
     targetCanvas,
-    targetCtx,
     newWidth,
     newHeight,
   }: {
     targetCanvas: HTMLCanvasElement;
-    targetCtx: CanvasRenderingContext2D;
     newWidth: number;
     newHeight: number;
   }): void => {
+    // Get canvas context
+    const ctx = targetCanvas.getContext("2d")!;
+
     // Step 1: Create a temporary canvas and context.
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d")!;
@@ -82,14 +92,16 @@ export class GreyscaleConverter {
     targetCanvas.height = newHeight;
 
     // Step 3: Draw the content of the temporary canvas back onto the resized original canvas.
-    targetCtx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
+    ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
   };
 
   private handleImageLoad = (_event: Event): void => {
-    this.convertImageToCanvas();
+    this.convertImageToCanvas({
+      img: greyscaleImg,
+      targetCanvas: canvas,
+    });
     this.resizeCanvas({
       targetCanvas: canvas,
-      targetCtx: ctx,
       newWidth: canvas.width * 0.5,
       newHeight: canvas.height * 0.5,
     });
