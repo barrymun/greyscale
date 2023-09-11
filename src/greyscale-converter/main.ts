@@ -1,5 +1,6 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
-import { colourCanvas, convertBtn, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
+import { colourCanvas, convertBtn, downloadBtn, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
+import { toggleBtnVisibility } from "utils/helpers";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -131,6 +132,10 @@ export class GreyscaleConverter {
   };
 
   private handleImageLoad = (_event: Event): void => {
+    toggleBtnVisibility({
+      btn: downloadBtn,
+      isVisible: false,
+    });
     this.clearCanvas({
       targetCanvas: greyscaleCanvas,
     });
@@ -146,13 +151,22 @@ export class GreyscaleConverter {
     //   newWidth,
     //   newHeight,
     // });
-    Object.assign(convertBtn.style, { display: "block" });
+
+    toggleBtnVisibility({
+      btn: convertBtn,
+      isVisible: true,
+    });
   };
 
   private handleConvertBtnClick = (): void => {
     this.convertToGreyscale({
       sourceCanvas: colourCanvas,
       targetCanvas: greyscaleCanvas,
+    });
+
+    toggleBtnVisibility({
+      btn: downloadBtn,
+      isVisible: true,
     });
   };
 

@@ -5,3 +5,4 @@ export const colorCtx = colourCanvas.getContext("2d")! as CanvasRenderingContext
 export const greyscaleCanvas = document.getElementById("greyscale-canvas")! as HTMLCanvasElement;
 export const greyscaleCtx = greyscaleCanvas.getContext("2d")! as CanvasRenderingContext2D;
 export const convertBtn = document.getElementById("convert-btn")! as HTMLButtonElement;
+export const downloadBtn = document.getElementById("download-btn")! as HTMLButtonElement;

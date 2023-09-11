@@ -52,10 +52,7 @@ img {
   padding: 16px;
 }
 
-/* TODO */
-/* .convert-btn-cntr {
-} */
-
-#convert-btn {
+#convert-btn,
+#download-btn {
   display: none;
 }
