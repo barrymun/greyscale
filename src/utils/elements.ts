@@ -6,3 +6,4 @@ export const greyscaleCanvas = document.getElementById("greyscale-canvas")! as H
 export const greyscaleCtx = greyscaleCanvas.getContext("2d")! as CanvasRenderingContext2D;
 export const convertBtn = document.getElementById("convert-btn")! as HTMLButtonElement;
 export const downloadLink = document.getElementById("download")! as HTMLAnchorElement;
+export const selectedFileName = document.getElementById("selected-file-name")! as HTMLSpanElement;

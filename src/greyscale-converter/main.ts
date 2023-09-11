@@ -1,6 +1,6 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
 import { colourCanvas, convertBtn, downloadLink, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
-import { toggleElementVisibility } from "utils/helpers";
+import { displayFileName, toggleElementVisibility } from "utils/helpers";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -17,6 +17,8 @@ export class GreyscaleConverter {
   }
 
   private handleChange = (event: Event): void => {
+    displayFileName(event);
+
     if (!(event.target instanceof HTMLInputElement)) return;
 
     if (!event.target.files) return;
