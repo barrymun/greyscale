@@ -100,10 +100,13 @@ export class GreyscaleConverter {
       img: greyscaleImg,
       targetCanvas: colourCanvas,
     });
+    const ratio: number = colourCanvas.width / colourCanvas.height;
+    const newWidth: number = window.innerWidth;
+    const newHeight: number = newWidth / ratio;
     this.resizeCanvas({
       targetCanvas: colourCanvas,
-      newWidth: colourCanvas.width * 0.5,
-      newHeight: colourCanvas.height * 0.5,
+      newWidth,
+      newHeight,
     });
     this.convertToGreyscale({
       sourceCanvas: colourCanvas,
