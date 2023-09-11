@@ -54,7 +54,6 @@ img[src=""] {
 .convert-btn-cntr {
 }
 
-#greyscale-img,
-#greyscale-canvas {
-  /* max-width: 25%; */
-}
+/* #greyscale-img {
+  max-width: 25%;
+} */

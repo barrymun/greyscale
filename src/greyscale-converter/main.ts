@@ -39,8 +39,46 @@ export class GreyscaleConverter {
     greyscaleCtx.putImageData(imageData, 0, 0);
   };
 
+  private resizeImage = ({ newWidth, newHeight }: { newWidth: number; newHeight: number }): void => {
+    console.log(newWidth, newHeight);
+  };
+
+  private resizeCanvas = ({
+    targetCanvas,
+    targetCtx,
+    newWidth,
+    newHeight,
+  }: {
+    targetCanvas: HTMLCanvasElement;
+    targetCtx: CanvasRenderingContext2D;
+    newWidth: number;
+    newHeight: number;
+  }): void => {
+    // Step 1: Create a temporary canvas and context.
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d")!;
+    tempCanvas.width = targetCanvas.width;
+    tempCanvas.height = targetCanvas.height;
+
+    // Copy the content of the original canvas onto the temporary canvas.
+    tempCtx.drawImage(targetCanvas, 0, 0);
+
+    // Step 2: Resize the original canvas.
+    targetCanvas.width = newWidth;
+    targetCanvas.height = newHeight;
+
+    // Step 3: Draw the content of the temporary canvas back onto the resized original canvas.
+    targetCtx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
+  };
+
   private handleImageLoad = (_event: Event): void => {
     this.convertToGreyscale();
+    this.resizeCanvas({
+      targetCanvas: greyscaleCanvas,
+      targetCtx: greyscaleCtx,
+      newWidth: greyscaleCanvas.width * 0.5,
+      newHeight: greyscaleCanvas.height * 0.5,
+    });
   };
 
   private handleChange = (event: Event): void => {
