@@ -1,4 +1,4 @@
-export const greyscaleInput = document.getElementById("greyscale-input")! as HTMLInputElement;
+export const greyscaleInput = document.getElementById("greyscale-file-input")! as HTMLInputElement;
 export const greyscaleImg = document.getElementById("greyscale-img")! as HTMLImageElement;
 export const colourCanvas = document.getElementById("canvas")! as HTMLCanvasElement;
 export const colorCtx = colourCanvas.getContext("2d")! as CanvasRenderingContext2D;
