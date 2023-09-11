@@ -1,6 +1,6 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
-import { colourCanvas, convertBtn, downloadBtn, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
-import { toggleBtnVisibility } from "utils/helpers";
+import { colourCanvas, convertBtn, downloadLink, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
+import { toggleElementVisibility } from "utils/helpers";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -132,8 +132,8 @@ export class GreyscaleConverter {
   };
 
   private handleImageLoad = (_event: Event): void => {
-    toggleBtnVisibility({
-      btn: downloadBtn,
+    toggleElementVisibility({
+      el: downloadLink,
       isVisible: false,
     });
     this.clearCanvas({
@@ -152,8 +152,8 @@ export class GreyscaleConverter {
     //   newHeight,
     // });
 
-    toggleBtnVisibility({
-      btn: convertBtn,
+    toggleElementVisibility({
+      el: convertBtn,
       isVisible: true,
     });
   };
@@ -164,16 +164,24 @@ export class GreyscaleConverter {
       targetCanvas: greyscaleCanvas,
     });
 
-    toggleBtnVisibility({
-      btn: downloadBtn,
+    toggleElementVisibility({
+      el: downloadLink,
       isVisible: true,
     });
+  };
+
+  private handleDownload = (): void => {
+    if (!this.getImageExtension()) return;
+
+    downloadLink.href = greyscaleCanvas.toDataURL(`image/${this.getImageExtension()}`);
+    downloadLink.download = `greyscale.${this.getImageExtension()}`;
   };
 
   private bindListeners = (): void => {
     greyscaleInput.addEventListener("change", this.handleChange);
     greyscaleImg.addEventListener("load", this.handleImageLoad);
     convertBtn.addEventListener("click", this.handleConvertBtnClick);
+    downloadLink.addEventListener("click", this.handleDownload);
 
     window.addEventListener("unload", this.handleUnload);
   };
@@ -182,6 +190,7 @@ export class GreyscaleConverter {
     greyscaleInput.removeEventListener("change", this.handleChange);
     greyscaleImg.removeEventListener("load", this.handleImageLoad);
     convertBtn.removeEventListener("click", this.handleConvertBtnClick);
+    downloadLink.removeEventListener("click", this.handleDownload);
 
     window.removeEventListener("unload", this.handleUnload);
   };
