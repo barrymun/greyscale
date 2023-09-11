@@ -16,12 +16,12 @@ export class GreyscaleConverter {
   }
 
   private convertToGreyscale = (): void => {
-    // Set canvas dimensions to match image
-    greyscaleCanvas.width = greyscaleImg.width;
-    greyscaleCanvas.height = greyscaleImg.height;
+    // Set canvas dimensions to match
+    greyscaleCanvas.width = canvas.width;
+    greyscaleCanvas.height = canvas.height;
 
-    // Draw image onto canvas
-    greyscaleCtx.drawImage(greyscaleImg, 0, 0);
+    // Copy canvas
+    greyscaleCtx.drawImage(canvas, 0, 0);
 
     // Get image data
     const imageData = greyscaleCtx.getImageData(0, 0, greyscaleCanvas.width, greyscaleCanvas.height);
@@ -84,13 +84,7 @@ export class GreyscaleConverter {
       newWidth: canvas.width * 0.5,
       newHeight: canvas.height * 0.5,
     });
-    // this.convertToGreyscale();
-    // this.resizeCanvas({
-    //   targetCanvas: greyscaleCanvas,
-    //   targetCtx: greyscaleCtx,
-    //   newWidth: greyscaleCanvas.width * 0.5,
-    //   newHeight: greyscaleCanvas.height * 0.5,
-    // });
+    this.convertToGreyscale();
   };
 
   private handleChange = (event: Event): void => {
