@@ -21,7 +21,7 @@ export class GreyscaleConverter {
 
     if (!(event.target instanceof HTMLInputElement)) return;
 
-    if (!event.target.files) return;
+    if (!event.target.files || event.target.files.length === 0) return;
 
     switch (event.target.files[0].type) {
       case ImageType.Png:
@@ -130,6 +130,7 @@ export class GreyscaleConverter {
     targetCanvas.height = newHeight;
 
     // Step 3: Draw the content of the temporary canvas back onto the resized original canvas
+    ctx.imageSmoothingEnabled = false;
     ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
   };
 
@@ -138,15 +139,18 @@ export class GreyscaleConverter {
       el: downloadLink,
       isVisible: false,
     });
+
     this.clearCanvas({
       targetCanvas: greyscaleCanvas,
     });
+
     this.convertImageToCanvas({
       img: greyscaleImg,
       targetCanvas: colourCanvas,
     });
+
     // const ratio: number = colourCanvas.width / colourCanvas.height;
-    // const newWidth: number = window.innerWidth;
+    // const newWidth: number = window.innerWidth / 2;
     // const newHeight: number = newWidth / ratio;
     // this.resizeCanvas({
     //   targetCanvas: colourCanvas,
