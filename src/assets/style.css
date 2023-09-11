@@ -32,14 +32,18 @@ a:hover, button:hover {
   transform: scale(1.05); /* Slightly increase the size of the button */
 }
 
+img {
+  display: none;
+}
+
+canvas {
+  max-width: 25%;
+}
+
 body {
   margin: 0;
   width: 100vw;
   height: 100vh;
-}
-
-img {
-  display: none;
 }
 
 .greyscale-file-input-cntr {
