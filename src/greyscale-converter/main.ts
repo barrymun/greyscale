@@ -1,5 +1,5 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
-import { canvas, ctx, greyscaleCanvas, greyscaleCtx, greyscaleImg, greyscaleInput } from "utils/elements";
+import { canvas, ctx, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -15,16 +15,25 @@ export class GreyscaleConverter {
     this.bindListeners();
   }
 
-  private convertToGreyscale = (): void => {
-    // Set canvas dimensions to match
-    greyscaleCanvas.width = canvas.width;
-    greyscaleCanvas.height = canvas.height;
+  private convertToGreyscale = ({
+    sourceCanvas,
+    targetCanvas,
+  }: {
+    sourceCanvas: HTMLCanvasElement;
+    targetCanvas: HTMLCanvasElement;
+  }): void => {
+    // get canvas context
+    const targetCtx = targetCanvas.getContext("2d")!;
 
-    // Copy canvas
-    greyscaleCtx.drawImage(canvas, 0, 0);
+    // source and target canvas dimensions must match
+    targetCanvas.width = sourceCanvas.width;
+    targetCanvas.height = sourceCanvas.height;
+
+    // copy source canvas onto target canvas
+    targetCtx.drawImage(sourceCanvas, 0, 0);
 
     // Get image data
-    const imageData = greyscaleCtx.getImageData(0, 0, greyscaleCanvas.width, greyscaleCanvas.height);
+    const imageData = targetCtx.getImageData(0, 0, targetCanvas.width, targetCanvas.height);
     const data = imageData.data;
 
     // Convert each pixel to greyscale
@@ -36,7 +45,7 @@ export class GreyscaleConverter {
     }
 
     // Put modified image data back onto canvas
-    greyscaleCtx.putImageData(imageData, 0, 0);
+    targetCtx.putImageData(imageData, 0, 0);
   };
 
   private convertImageToCanvas = (): void => {
@@ -84,7 +93,10 @@ export class GreyscaleConverter {
       newWidth: canvas.width * 0.5,
       newHeight: canvas.height * 0.5,
     });
-    this.convertToGreyscale();
+    this.convertToGreyscale({
+      sourceCanvas: canvas,
+      targetCanvas: greyscaleCanvas,
+    });
   };
 
   private handleChange = (event: Event): void => {
