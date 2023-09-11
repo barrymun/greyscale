@@ -1,5 +1,5 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
-import { colourCanvas, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
+import { colourCanvas, convertBtn, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -15,6 +15,41 @@ export class GreyscaleConverter {
     this.bindListeners();
   }
 
+  private handleChange = (event: Event): void => {
+    if (!(event.target instanceof HTMLInputElement)) return;
+
+    if (!event.target.files) return;
+
+    switch (event.target.files[0].type) {
+      case ImageType.Png:
+        this.setImageExtension(ImageExtension.Png);
+        break;
+      case ImageType.Jpeg:
+        this.setImageExtension(ImageExtension.Jpeg);
+        break;
+      default:
+        break;
+    }
+
+    if (!this.getImageExtension()) {
+      alert("Invalid image type");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      greyscaleImg.src = reader.result as string;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+
+  private clearCanvas = ({ targetCanvas }: { targetCanvas: HTMLCanvasElement }): void => {
+    // get canvas context
+    const ctx = targetCanvas.getContext("2d")!;
+
+    ctx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+  };
+
   private convertToGreyscale = ({
     sourceCanvas,
     targetCanvas,
@@ -23,17 +58,17 @@ export class GreyscaleConverter {
     targetCanvas: HTMLCanvasElement;
   }): void => {
     // get canvas context
-    const targetCtx = targetCanvas.getContext("2d")!;
+    const ctx = targetCanvas.getContext("2d")!;
 
     // source and target canvas dimensions must match
     targetCanvas.width = sourceCanvas.width;
     targetCanvas.height = sourceCanvas.height;
 
     // copy source canvas onto target canvas
-    targetCtx.drawImage(sourceCanvas, 0, 0);
+    ctx.drawImage(sourceCanvas, 0, 0);
 
     // Get image data
-    const imageData = targetCtx.getImageData(0, 0, targetCanvas.width, targetCanvas.height);
+    const imageData = ctx.getImageData(0, 0, targetCanvas.width, targetCanvas.height);
     const data = imageData.data;
 
     // Convert each pixel to greyscale
@@ -45,7 +80,7 @@ export class GreyscaleConverter {
     }
 
     // Put modified image data back onto canvas
-    targetCtx.putImageData(imageData, 0, 0);
+    ctx.putImageData(imageData, 0, 0);
   };
 
   private convertImageToCanvas = ({
@@ -96,6 +131,9 @@ export class GreyscaleConverter {
   };
 
   private handleImageLoad = (_event: Event): void => {
+    this.clearCanvas({
+      targetCanvas: greyscaleCanvas,
+    });
     this.convertImageToCanvas({
       img: greyscaleImg,
       targetCanvas: colourCanvas,
@@ -108,43 +146,20 @@ export class GreyscaleConverter {
     //   newWidth,
     //   newHeight,
     // });
+    Object.assign(convertBtn.style, { display: "block" });
+  };
+
+  private handleConvertBtnClick = (): void => {
     this.convertToGreyscale({
       sourceCanvas: colourCanvas,
       targetCanvas: greyscaleCanvas,
     });
   };
 
-  private handleChange = (event: Event): void => {
-    if (!(event.target instanceof HTMLInputElement)) return;
-
-    if (!event.target.files) return;
-
-    switch (event.target.files[0].type) {
-      case ImageType.Png:
-        this.setImageExtension(ImageExtension.Png);
-        break;
-      case ImageType.Jpeg:
-        this.setImageExtension(ImageExtension.Jpeg);
-        break;
-      default:
-        break;
-    }
-
-    if (!this.getImageExtension()) {
-      alert("Invalid image type");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      greyscaleImg.src = reader.result as string;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  };
-
   private bindListeners = (): void => {
     greyscaleInput.addEventListener("change", this.handleChange);
     greyscaleImg.addEventListener("load", this.handleImageLoad);
+    convertBtn.addEventListener("click", this.handleConvertBtnClick);
 
     window.addEventListener("unload", this.handleUnload);
   };
@@ -152,6 +167,7 @@ export class GreyscaleConverter {
   private handleUnload = (): void => {
     greyscaleInput.removeEventListener("change", this.handleChange);
     greyscaleImg.removeEventListener("load", this.handleImageLoad);
+    convertBtn.removeEventListener("click", this.handleConvertBtnClick);
 
     window.removeEventListener("unload", this.handleUnload);
   };

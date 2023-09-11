@@ -46,6 +46,7 @@ img {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 16px;
 
   width: calc(100% - 32px);
   padding: 16px;
@@ -54,3 +55,7 @@ img {
 /* TODO */
 /* .convert-btn-cntr {
 } */
+
+#convert-btn {
+  display: none;
+}
