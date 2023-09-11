@@ -1,5 +1,5 @@
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
-import { greyscaleCanvas, greyscaleCtx, greyscaleImg, greyscaleInput } from "utils/elements";
+import { canvas, ctx, greyscaleCanvas, greyscaleCtx, greyscaleImg, greyscaleInput } from "utils/elements";
 import { ImageExtension, ImageType } from "utils/types";
 
 export class GreyscaleConverter {
@@ -39,8 +39,13 @@ export class GreyscaleConverter {
     greyscaleCtx.putImageData(imageData, 0, 0);
   };
 
-  private resizeImage = ({ newWidth, newHeight }: { newWidth: number; newHeight: number }): void => {
-    console.log(newWidth, newHeight);
+  private convertImageToCanvas = (): void => {
+    // Set canvas dimensions to match the image
+    canvas.width = greyscaleImg.width;
+    canvas.height = greyscaleImg.height;
+
+    // Draw the image onto the canvas
+    ctx.drawImage(greyscaleImg, 0, 0, greyscaleImg.width, greyscaleImg.height);
   };
 
   private resizeCanvas = ({
@@ -72,13 +77,20 @@ export class GreyscaleConverter {
   };
 
   private handleImageLoad = (_event: Event): void => {
-    this.convertToGreyscale();
+    this.convertImageToCanvas();
     this.resizeCanvas({
-      targetCanvas: greyscaleCanvas,
-      targetCtx: greyscaleCtx,
-      newWidth: greyscaleCanvas.width * 0.5,
-      newHeight: greyscaleCanvas.height * 0.5,
+      targetCanvas: canvas,
+      targetCtx: ctx,
+      newWidth: canvas.width * 0.5,
+      newHeight: canvas.height * 0.5,
     });
+    // this.convertToGreyscale();
+    // this.resizeCanvas({
+    //   targetCanvas: greyscaleCanvas,
+    //   targetCtx: greyscaleCtx,
+    //   newWidth: greyscaleCanvas.width * 0.5,
+    //   newHeight: greyscaleCanvas.height * 0.5,
+    // });
   };
 
   private handleChange = (event: Event): void => {
