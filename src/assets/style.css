@@ -44,7 +44,8 @@ img[src=""] {
 .greyscale-output-cntr {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  flex-direction: column;
 
   width: calc(100% - 32px);
   padding: 16px;
@@ -55,5 +56,5 @@ img[src=""] {
 
 #greyscale-img,
 #greyscale-canvas {
-  max-width: 40%;
+  /* max-width: 25%; */
 }

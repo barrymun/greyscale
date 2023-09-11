@@ -15,7 +15,7 @@ export class GreyscaleConverter {
     this.bindListeners();
   }
 
-  private handleImageLoad = (_event: Event): void => {
+  private convertToGreyscale = (): void => {
     // Set canvas dimensions to match image
     greyscaleCanvas.width = greyscaleImg.width;
     greyscaleCanvas.height = greyscaleImg.height;
@@ -37,6 +37,10 @@ export class GreyscaleConverter {
 
     // Put modified image data back onto canvas
     greyscaleCtx.putImageData(imageData, 0, 0);
+  };
+
+  private handleImageLoad = (_event: Event): void => {
+    this.convertToGreyscale();
   };
 
   private handleChange = (event: Event): void => {
