@@ -35,3 +35,37 @@ export const displayFileName = (event: Event) => {
     selectedFileName.textContent = "No file chosen";
   }
 };
+
+/**
+ * this function is not used in the project
+ * leaving it here for future reference
+ */
+export const resizeCanvas = ({
+  targetCanvas,
+  newWidth,
+  newHeight,
+}: {
+  targetCanvas: HTMLCanvasElement;
+  newWidth: number;
+  newHeight: number;
+}): void => {
+  // Get canvas context
+  const ctx = targetCanvas.getContext("2d")!;
+
+  // Step 1: Create a temporary canvas and context
+  const tempCanvas = document.createElement("canvas");
+  const tempCtx = tempCanvas.getContext("2d")!;
+  tempCanvas.width = targetCanvas.width;
+  tempCanvas.height = targetCanvas.height;
+
+  // Copy the content of the original canvas onto the temporary canvas
+  tempCtx.drawImage(targetCanvas, 0, 0);
+
+  // Step 2: Resize the original canvas
+  targetCanvas.width = newWidth;
+  targetCanvas.height = newHeight;
+
+  // Step 3: Draw the content of the temporary canvas back onto the resized original canvas
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, newWidth, newHeight);
+};
