@@ -1,3 +1,5 @@
+import { convertImageToCanvas, isImageUploaded } from "image-ops";
+
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
 import { colourCanvas, convertBtn, downloadLink, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
 import { displayFileName, toggleElementVisibility } from "utils/helpers";
@@ -22,6 +24,8 @@ export class GreyscaleConverter {
     if (!(event.target instanceof HTMLInputElement)) return;
 
     if (!event.target.files || event.target.files.length === 0) return;
+
+    if (!isImageUploaded(event)) return;
 
     switch (event.target.files[0].type) {
       case ImageType.Png:
@@ -50,7 +54,29 @@ export class GreyscaleConverter {
     // get canvas context
     const ctx = targetCanvas.getContext("2d")!;
 
+    // clear canvas
     ctx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+
+    // clear path
+    ctx.beginPath();
+  };
+
+  private copyCanvas = ({
+    sourceCanvas,
+    targetCanvas,
+  }: {
+    sourceCanvas: HTMLCanvasElement;
+    targetCanvas: HTMLCanvasElement;
+  }) => {
+    // get canvas context
+    const targetCtx = targetCanvas.getContext("2d")!;
+
+    // source and target canvas dimensions must match
+    targetCanvas.width = sourceCanvas.width;
+    targetCanvas.height = sourceCanvas.height;
+
+    // copy source canvas onto target canvas
+    targetCtx.drawImage(sourceCanvas, 0, 0);
   };
 
   private convertToGreyscale = ({
@@ -61,17 +87,15 @@ export class GreyscaleConverter {
     targetCanvas: HTMLCanvasElement;
   }): void => {
     // get canvas context
-    const ctx = targetCanvas.getContext("2d")!;
+    const targetCtx = targetCanvas.getContext("2d")!;
 
-    // source and target canvas dimensions must match
-    targetCanvas.width = sourceCanvas.width;
-    targetCanvas.height = sourceCanvas.height;
-
-    // copy source canvas onto target canvas
-    ctx.drawImage(sourceCanvas, 0, 0);
+    this.copyCanvas({
+      sourceCanvas,
+      targetCanvas,
+    });
 
     // Get image data
-    const imageData = ctx.getImageData(0, 0, targetCanvas.width, targetCanvas.height);
+    const imageData = targetCtx.getImageData(0, 0, targetCanvas.width, targetCanvas.height);
     const data = imageData.data;
 
     // Convert each pixel to greyscale
@@ -83,25 +107,7 @@ export class GreyscaleConverter {
     }
 
     // Put modified image data back onto canvas
-    ctx.putImageData(imageData, 0, 0);
-  };
-
-  private convertImageToCanvas = ({
-    img,
-    targetCanvas,
-  }: {
-    img: HTMLImageElement;
-    targetCanvas: HTMLCanvasElement;
-  }): void => {
-    // Get canvas context
-    const ctx = targetCanvas.getContext("2d")!;
-
-    // Set canvas dimensions to match the image
-    targetCanvas.width = img.width;
-    targetCanvas.height = img.height;
-
-    // Draw the image onto the canvas
-    ctx.drawImage(img, 0, 0, img.width, img.height);
+    targetCtx.putImageData(imageData, 0, 0);
   };
 
   private handleImageLoad = (_event: Event): void => {
@@ -111,11 +117,17 @@ export class GreyscaleConverter {
     });
 
     this.clearCanvas({
+      targetCanvas: colourCanvas,
+    });
+    this.clearCanvas({
       targetCanvas: greyscaleCanvas,
     });
 
-    this.convertImageToCanvas({
+    const newCanvas = convertImageToCanvas({
       img: greyscaleImg,
+    });
+    this.copyCanvas({
+      sourceCanvas: newCanvas,
       targetCanvas: colourCanvas,
     });
 

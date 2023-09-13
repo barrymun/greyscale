@@ -272,6 +272,11 @@ husky@^8.0.0:
   resolved "https://registry.yarnpkg.com/husky/-/husky-8.0.3.tgz#4936d7212e46d1dea28fef29bb3a108872cd9184"
   integrity sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==
 
+image-ops@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/image-ops/-/image-ops-1.0.4.tgz#41985d080ba285e02fa85a051d6fc76e8fc66bef"
+  integrity sha512-HmBE0FznelfWvvCyjdnCoDeY2u6do8yVwzXqmcJWiDDjgx0ia1LTKWcBbE7y1WbZhbtsQ52sbt6E8jV6qC/T0Q==
+
 is-fullwidth-code-point@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/is-fullwidth-code-point/-/is-fullwidth-code-point-4.0.0.tgz#fae3167c729e7463f8461ce512b080a49268aa88"
