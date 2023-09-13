@@ -1,4 +1,4 @@
-import { convertImageToCanvas, isImageUploaded } from "image-ops";
+import { convertImageToCanvas, getImageTargetFileList } from "image-ops";
 
 import { blueCoefficient, greenCoefficient, redCoefficient } from "utils/constants";
 import { colourCanvas, convertBtn, downloadLink, greyscaleCanvas, greyscaleImg, greyscaleInput } from "utils/elements";
@@ -21,13 +21,10 @@ export class GreyscaleConverter {
   private handleChange = (event: Event): void => {
     displayFileName(event);
 
-    if (!(event.target instanceof HTMLInputElement)) return;
+    const files = getImageTargetFileList(event);
+    if (!files) return;
 
-    if (!event.target.files || event.target.files.length === 0) return;
-
-    if (!isImageUploaded(event)) return;
-
-    switch (event.target.files[0].type) {
+    switch (files[0].type) {
       case ImageType.Png:
         this.setImageExtension(ImageExtension.Png);
         break;
@@ -47,7 +44,7 @@ export class GreyscaleConverter {
     reader.onload = () => {
       greyscaleImg.src = reader.result as string;
     };
-    reader.readAsDataURL(event.target.files[0]);
+    reader.readAsDataURL(files[0]);
   };
 
   private clearCanvas = ({ targetCanvas }: { targetCanvas: HTMLCanvasElement }): void => {
@@ -123,9 +120,7 @@ export class GreyscaleConverter {
       targetCanvas: greyscaleCanvas,
     });
 
-    const newCanvas = convertImageToCanvas({
-      img: greyscaleImg,
-    });
+    const newCanvas = convertImageToCanvas(greyscaleImg);
     this.copyCanvas({
       sourceCanvas: newCanvas,
       targetCanvas: colourCanvas,

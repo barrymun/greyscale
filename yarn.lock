@@ -770,9 +770,9 @@ ignore@^5.2.0, ignore@^5.2.4:
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
 image-ops@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/image-ops/-/image-ops-1.0.4.tgz#41985d080ba285e02fa85a051d6fc76e8fc66bef"
-  integrity sha512-HmBE0FznelfWvvCyjdnCoDeY2u6do8yVwzXqmcJWiDDjgx0ia1LTKWcBbE7y1WbZhbtsQ52sbt6E8jV6qC/T0Q==
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/image-ops/-/image-ops-1.0.6.tgz#8a1a82c4cee21e1300e2c78a17617d3bc13b5d76"
+  integrity sha512-XxsSuxzJVQeW5+i5PUN1uAu5d1HdQOXvwdndMCOGRihyz9t9SAwYAVswy+cXIgFAUku0FaBnYLsnAAY4zQAmtA==
 
 import-fresh@^3.2.1:
   version "3.3.0"
